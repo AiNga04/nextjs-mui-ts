@@ -22,11 +22,13 @@ const AppMainSlider = () => {
         onClick={props.onClick}
         sx={{
           position: "absolute",
-          right: 0,
-          top: "48%",
+          right: { xs: "5px", md: "0" }, // Giảm khoảng cách trên mobile
+          top: "50%",
+          transform: "translateY(-50%)",
           zIndex: 2,
-          minWidth: 30,
-          width: 35,
+          minWidth: { xs: 25, md: 35 }, // Nút nhỏ hơn trên mobile
+          width: { xs: 25, md: 35 },
+          height: { xs: 25, md: 35 },
           color: "#000",
           backgroundColor: "#ffffff80",
           "&:hover": {
@@ -39,7 +41,7 @@ const AppMainSlider = () => {
           },
         }}
       >
-        <ChevronRightIcon />
+        <ChevronRightIcon fontSize="small" />
       </Button>
     );
   };
@@ -51,10 +53,13 @@ const AppMainSlider = () => {
         onClick={props.onClick}
         sx={{
           position: "absolute",
-          top: "48%",
+          left: { xs: "5px", md: "0" }, // Giảm khoảng cách trên mobile
+          top: "50%",
+          transform: "translateY(-50%)",
           zIndex: 2,
-          minWidth: 30,
-          width: 35,
+          minWidth: { xs: 25, md: 35 }, // Nút nhỏ hơn trên mobile
+          width: { xs: 25, md: 35 },
+          height: { xs: 25, md: 35 },
           color: "#000",
           backgroundColor: "#ffffff80",
           "&:hover": {
@@ -67,7 +72,7 @@ const AppMainSlider = () => {
           },
         }}
       >
-        <ChevronLeftIcon />
+        <ChevronLeftIcon fontSize="small" />
       </Button>
     );
   };
@@ -84,6 +89,7 @@ const AppMainSlider = () => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
+
   return (
     <Box
       sx={{
@@ -93,62 +99,37 @@ const AppMainSlider = () => {
           alignItems: "center",
           borderRadius: "10px",
           overflow: "hidden",
-          padding: "10px !important",
+          padding: { xs: "5px !important", md: "10px !important" }, // Giảm padding trên mobile
           "& img": {
             width: "100%",
-            height: "100%",
+            height: { xs: "250px", sm: "350px", md: "450px" }, // Chiều cao linh hoạt theo kích thước màn hình
             objectFit: "cover",
             borderRadius: "10px",
           },
         },
-
         width: "100%",
-        padding: "20px 0 !important",
+        padding: { xs: "10px 0 !important", md: "20px 0 !important" }, // Giảm padding tổng thể trên mobile
         borderRadius: "10px",
       }}
     >
       <Slider {...settings}>
         <div className="item">
-          <img
-            alt="carousel 1"
-            src={ImageCarousel1.src}
-            style={{ width: "100%", height: "450px" }}
-          />
+          <img alt="carousel 1" src={ImageCarousel1.src} />
         </div>
         <div className="item">
-          <img
-            alt="carousel 2"
-            src={ImageCarousel2.src}
-            style={{ width: "100%", height: "450px" }}
-          />
+          <img alt="carousel 2" src={ImageCarousel2.src} />
         </div>
         <div className="item">
-          <img
-            alt="carousel 3"
-            src={ImageCarousel3.src}
-            style={{ width: "100%", height: "450px" }}
-          />
+          <img alt="carousel 3" src={ImageCarousel3.src} />
         </div>
         <div className="item">
-          <img
-            alt="carousel 4"
-            src={ImageCarousel4.src}
-            style={{ width: "100%", height: "450px" }}
-          />
+          <img alt="carousel 4" src={ImageCarousel4.src} />
         </div>
         <div className="item">
-          <img
-            alt="carousel 5"
-            src={ImageCarousel5.src}
-            style={{ width: "100%", height: "450px" }}
-          />
+          <img alt="carousel 5" src={ImageCarousel5.src} />
         </div>
         <div className="item">
-          <img
-            alt="carousel 6"
-            src={ImageCarousel6.src}
-            style={{ width: "100%", height: "450px" }}
-          />
+          <img alt="carousel 6" src={ImageCarousel6.src} />
         </div>
       </Slider>
     </Box>

@@ -16,6 +16,7 @@ interface IProps {
 
 const AppMainSliderMusic = (props: IProps) => {
   const data = props.data;
+
   const NextArrow = (props: any) => {
     return (
       <Button
@@ -84,7 +85,24 @@ const AppMainSliderMusic = (props: IProps) => {
     cssEase: "linear",
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
+
   return (
     <Box
       sx={{
