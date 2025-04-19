@@ -9,11 +9,13 @@ export const metadata: Metadata = {
   title: "Music Streaming App",
   description:
     "A modern music streaming application built with Next.js and Material UI",
-  viewport: "width=device-width, initial-scale=1",
   icons: {
     icon: "/favicon.ico",
   },
 };
+
+// Define viewport separately
+export const viewport = "width=device-width, initial-scale=1";
 
 export default function RootLayout({
   children,

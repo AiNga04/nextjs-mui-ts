@@ -4,10 +4,14 @@ import { JWT } from "next-auth/jwt";
 interface IUser {
   _id: string;
   username: string;
+  name: string;
   email: string;
   isVerify: boolean;
   type: string;
   role: string;
+  address: string;
+  gender: string;
+  age: int;
 }
 
 declare module "next-auth/jwt" {

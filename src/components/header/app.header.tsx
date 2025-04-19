@@ -15,7 +15,6 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Container } from "@mui/material";
 import { Avatar } from "@mui/material";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import PersonAdd from "@mui/icons-material/PersonAdd";
 import Divider from "@mui/material/Divider";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
@@ -26,6 +25,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -67,10 +67,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const linkStyle = {
+  textDecoration: "unset",
+  color: "unset",
+};
+
 export default function AppHeader() {
   const { data: session } = useSession();
   console.log("session", session);
-
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -95,8 +100,30 @@ export default function AppHeader() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleLogout = () => {
-    signOut();
+  const handleLogout = async () => {
+    // Close the menu first
+    handleMenuClose();
+    // Sign out with a callback to redirect to signin page
+    await signOut({ redirect: false });
+    router.push("/api/auth/signin");
+  };
+
+  // Function to get user initials for Avatar
+  const getUserInitials = (): string => {
+    if (!session || !session.user) return "ER";
+
+    // Try to get initials from username
+    if (session.user.username && typeof session.user.username === "string") {
+      return session.user.username.substring(0, 2).toUpperCase();
+    }
+
+    // Fallback to name
+    if (session.user.name && typeof session.user.name === "string") {
+      return session.user.name.substring(0, 2).toUpperCase();
+    }
+
+    // Default fallback
+    return "ER";
   };
 
   const menuId = "primary-search-account-menu";
@@ -138,69 +165,24 @@ export default function AppHeader() {
       transformOrigin={{ horizontal: "right", vertical: "top" }}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
-      <MenuItem
-        onClick={handleMenuClose}
-        sx={{
-          "> a": {
-            textDecoration: "unset",
-            color: "unset",
-          },
-        }}
-      >
+      <MenuItem onClick={handleMenuClose} sx={{ "> a": linkStyle }}>
         <Link href="/profile">Profile</Link>
       </MenuItem>
-      <MenuItem
-        onClick={handleMenuClose}
-        sx={{
-          "> a": {
-            textDecoration: "unset",
-            color: "unset",
-          },
-        }}
-      >
+      <MenuItem onClick={handleMenuClose} sx={{ "> a": linkStyle }}>
         <Link href="/profile">My account</Link>
       </MenuItem>
       <Divider />
-      <MenuItem
-        onClick={handleMenuClose}
-        sx={{
-          "> a": {
-            textDecoration: "unset",
-            color: "unset",
-          },
-        }}
-      >
-        <ListItemIcon>
-          <PersonAdd fontSize="small" />
-        </ListItemIcon>
-      </MenuItem>
-      <MenuItem
-        onClick={handleMenuClose}
-        sx={{
-          "> a": {
-            textDecoration: "unset",
-            color: "unset",
-          },
-        }}
-      >
+      <MenuItem onClick={handleMenuClose} sx={{ "> a": linkStyle }}>
         <ListItemIcon>
           <Settings fontSize="small" />
         </ListItemIcon>
         <Link href="/settings">Settings</Link>
       </MenuItem>
-      <MenuItem
-        onClick={handleMenuClose}
-        sx={{
-          "> a": {
-            textDecoration: "unset",
-            color: "unset",
-          },
-        }}
-      >
+      <MenuItem onClick={handleLogout}>
         <ListItemIcon>
           <Logout fontSize="small" />
         </ListItemIcon>
-        <span onClick={handleLogout}>Logout</span>
+        <span>Logout</span>
       </MenuItem>
     </Menu>
   );
@@ -251,97 +233,32 @@ export default function AppHeader() {
           gap: "10px",
         }}
       >
-        <MenuItem
-          sx={{
-            "> a": {
-              textDecoration: "unset",
-              color: "unset",
-            },
-          }}
-        >
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
+        <MenuItem sx={{ "> a": linkStyle }}>
+          <IconButton size="large" aria-label="home" color="inherit">
             <HomeIcon />
           </IconButton>
           <Link href="/">Home</Link>
         </MenuItem>
-        <MenuItem
-          sx={{
-            "> a": {
-              textDecoration: "unset",
-              color: "unset",
-            },
-          }}
-        >
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
+        <MenuItem sx={{ "> a": linkStyle }}>
+          <IconButton size="large" aria-label="about" color="inherit">
             <InfoIcon />
           </IconButton>
           <Link href="/about">About</Link>
         </MenuItem>
-        <MenuItem
-          sx={{
-            "> a": {
-              textDecoration: "unset",
-              color: "unset",
-            },
-          }}
-        >
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
+        <MenuItem sx={{ "> a": linkStyle }}>
+          <IconButton size="large" aria-label="playlist" color="inherit">
             <LibraryMusicIcon />
           </IconButton>
           <Link href="/playlist">Playlist</Link>
         </MenuItem>
-        <MenuItem
-          sx={{
-            "> a": {
-              textDecoration: "unset",
-              color: "unset",
-            },
-          }}
-        >
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
+        <MenuItem sx={{ "> a": linkStyle }}>
+          <IconButton size="large" aria-label="likes" color="inherit">
             <FavoriteBorderIcon />
           </IconButton>
           <Link href="/likes">Likes</Link>
         </MenuItem>
-        <MenuItem
-          sx={{
-            "> a": {
-              textDecoration: "unset",
-              color: "unset",
-            },
-          }}
-        >
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
+        <MenuItem sx={{ "> a": linkStyle }}>
+          <IconButton size="large" aria-label="upload" color="inherit">
             <FileUploadIcon />
           </IconButton>
           <Link href="/upload">Upload</Link>
@@ -398,11 +315,7 @@ export default function AppHeader() {
                     display: { xs: "none", md: "flex" },
                     gap: "15px",
                     alignItems: "center",
-
-                    "> a": {
-                      textDecoration: "unset",
-                      color: "unset",
-                    },
+                    "> a": linkStyle,
                   }}
                 >
                   <Link href="/">Home</Link>
@@ -410,7 +323,12 @@ export default function AppHeader() {
                   <Link href="/playlist">Playlist</Link>
                   <Link href="/likes">Likes</Link>
                   <Link href="/upload">Upload</Link>
-                  <Avatar onClick={handleProfileMenuOpen}>NG</Avatar>
+                  <Avatar
+                    onClick={handleProfileMenuOpen}
+                    sx={{ cursor: "pointer" }}
+                  >
+                    {getUserInitials()}
+                  </Avatar>
                 </Box>
                 <Box sx={{ display: { xs: "flex", md: "none" } }}>
                   <IconButton
@@ -426,7 +344,9 @@ export default function AppHeader() {
                 </Box>
               </>
             ) : (
-              <div onClick={() => signIn()}>Sign in</div>
+              <div onClick={() => signIn()} style={{ cursor: "pointer" }}>
+                Sign in
+              </div>
             )}
           </Toolbar>
         </Container>
