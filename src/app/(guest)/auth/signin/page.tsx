@@ -1,3 +1,6 @@
+"use client";
+import * as React from "react";
+import "@/assets/styles/app.scss";
 import {
   Grid,
   Box,
@@ -8,12 +11,140 @@ import {
   Checkbox,
   FormControlLabel,
   Link,
+  Alert,
 } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import Loading from "../../components/loading/loading";
 
 const SignInPage = () => {
-  return (
+  const router = useRouter();
+  const { status } = useSession();
+
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [error, setError] = React.useState("");
+
+  // Form state
+  const [formData, setFormData] = React.useState({
+    username: "",
+    password: "",
+    rememberMe: false,
+  });
+
+  // Form validation errors
+  const [formErrors, setFormErrors] = React.useState({
+    username: "",
+    password: "",
+  });
+
+  // Redirect if authenticated
+  React.useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/");
+    }
+  }, [status, router]);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    // Clear error when user types
+    if (formErrors[name as keyof typeof formErrors]) {
+      setFormErrors({
+        ...formErrors,
+        [name]: "",
+      });
+    }
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      rememberMe: e.target.checked,
+    });
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    const errors = { username: "", password: "" };
+
+    if (!formData.username.trim()) {
+      errors.username = "Username or email is required";
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      errors.password = "Password is required";
+      isValid = false;
+    } else if (formData.password.length < 6) {
+      errors.password = "Password must be at least 6 characters";
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        username: formData.username,
+        password: formData.password,
+      });
+
+      if (result?.error) {
+        setError("Invalid username or password");
+      } else {
+        router.push("/");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return status === "authenticated" ? (
+    <Loading />
+  ) : (
     <Grid
       container
       justifyContent="center"
@@ -22,28 +153,21 @@ const SignInPage = () => {
         minHeight: "100vh",
         bgcolor: "linear-gradient(135deg, #e0f7fa 0%, #80deea 100%)",
         padding: "20px",
-        boxSizing: "border-box",
       }}
     >
       <Grid
-        item
-        xs={12}
-        sm={8}
-        md={6}
-        lg={4}
+        size={{ xs: 12, sm: 8, md: 6, lg: 4 }}
         sx={{
           background: "#fff",
           borderRadius: "20px",
           padding: "40px",
           boxShadow: "0px 8px 30px rgba(0, 0, 0, 0.15)",
           transition: "transform 0.3s ease-in-out",
-          "&:hover": {
-            transform: "translateY(-5px)",
-          },
         }}
       >
         <Box
           component="form"
+          onSubmit={handleSubmit}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -64,12 +188,22 @@ const SignInPage = () => {
             Sign In
           </Typography>
 
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <TextField
             name="username"
             label="Email or Username"
             variant="outlined"
             fullWidth
             required
+            value={formData.username}
+            onChange={handleInputChange}
+            error={!!formErrors.username}
+            helperText={formErrors.username}
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderRadius: "10px",
@@ -83,26 +217,55 @@ const SignInPage = () => {
             }}
           />
 
-          <TextField
-            name="password"
-            label="Password"
-            type="password"
+          <FormControl
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "10px",
+                "&:hover fieldset": {
+                  borderColor: "#3f51b5",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#3f51b5",
+                },
+              },
+            }}
             variant="outlined"
-            fullWidth
-            required
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "10px",
-                "&:hover fieldset": {
-                  borderColor: "#3f51b5",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#3f51b5",
-                },
-              },
-            }}
-          />
-
+            error={!!formErrors.password}
+          >
+            <InputLabel htmlFor="outlined-adornment-password">
+              Password
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={formData.password}
+              onChange={handleInputChange}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={
+                      showPassword
+                        ? "hide the password"
+                        : "display the password"
+                    }
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password *"
+            />
+            {formErrors.password && (
+              <Typography color="error" variant="caption" sx={{ mt: 1, ml: 2 }}>
+                {formErrors.password}
+              </Typography>
+            )}
+          </FormControl>
           <Box
             sx={{
               display: "flex",
@@ -113,7 +276,13 @@ const SignInPage = () => {
             }}
           >
             <FormControlLabel
-              control={<Checkbox color="primary" />}
+              control={
+                <Checkbox
+                  color="primary"
+                  checked={formData.rememberMe}
+                  onChange={handleCheckboxChange}
+                />
+              }
               label="Remember me"
               sx={{ color: "#666" }}
             />
@@ -127,9 +296,11 @@ const SignInPage = () => {
           </Box>
 
           <Button
+            type="submit"
             variant="contained"
             size="large"
             fullWidth
+            disabled={isSubmitting}
             sx={{
               py: 1.5,
               borderRadius: "10px",
@@ -141,7 +312,7 @@ const SignInPage = () => {
               },
             }}
           >
-            Sign In
+            {isSubmitting ? "Signing In..." : "Sign In"}
           </Button>
 
           <Divider sx={{ my: 2, color: "#888" }}>Or</Divider>
@@ -151,6 +322,7 @@ const SignInPage = () => {
             size="large"
             fullWidth
             startIcon={<GitHubIcon />}
+            onClick={() => signIn("github", { callbackUrl: "/" })}
             sx={{
               py: 1.5,
               borderRadius: "10px",
@@ -172,6 +344,7 @@ const SignInPage = () => {
             size="large"
             fullWidth
             startIcon={<GoogleIcon />}
+            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
             sx={{
               py: 1.5,
               borderRadius: "10px",

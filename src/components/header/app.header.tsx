@@ -24,7 +24,7 @@ import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import Link from "next/link";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Search = styled("div")(({ theme }) => ({
@@ -74,7 +74,6 @@ const linkStyle = {
 
 export default function AppHeader() {
   const { data: session } = useSession();
-  console.log("session", session);
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -105,7 +104,7 @@ export default function AppHeader() {
     handleMenuClose();
     // Sign out with a callback to redirect to signin page
     await signOut({ redirect: false });
-    router.push("/api/auth/signin");
+    router.push("/auth/signin");
   };
 
   // Function to get user initials for Avatar
@@ -165,6 +164,11 @@ export default function AppHeader() {
       transformOrigin={{ horizontal: "right", vertical: "top" }}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
+      {session?.user.role === "ADMIN" && (
+        <MenuItem onClick={handleMenuClose} sx={{ "> a": linkStyle }}>
+          <Link href="/admin">Admin</Link>
+        </MenuItem>
+      )}
       <MenuItem onClick={handleMenuClose} sx={{ "> a": linkStyle }}>
         <Link href="/profile">Profile</Link>
       </MenuItem>
@@ -284,7 +288,8 @@ export default function AppHeader() {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: "#4c5c6c",
+          background:
+            "linear-gradient(180deg, rgba(76,29,149,1) 0%, rgba(124,58,237,1) 100%)",
           color: "#fff",
         }}
       >
@@ -344,7 +349,10 @@ export default function AppHeader() {
                 </Box>
               </>
             ) : (
-              <div onClick={() => signIn()} style={{ cursor: "pointer" }}>
+              <div
+                onClick={() => router.push("/auth/signin")}
+                style={{ cursor: "pointer" }}
+              >
                 Sign in
               </div>
             )}

@@ -10,7 +10,6 @@ const GITHUB_SECRET = process.env.GITHUB_SECRET;
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export const authOptions: AuthOptions = {
-  secret: process.env.NO_SECRET,
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -85,6 +84,20 @@ export const authOptions: AuthOptions = {
       session.refresh_token = token.refresh_token;
       return session;
     },
+  },
+  pages: {
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
+    error: "/auth/error",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  secret: process.env.NO_SECRET,
+  jwt: {
+    secret: process.env.NO_SECRET,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
 };
 

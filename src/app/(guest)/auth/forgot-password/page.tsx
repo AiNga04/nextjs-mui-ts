@@ -1,4 +1,6 @@
+"use client";
 import { Grid, Box, Typography, TextField, Button, Link } from "@mui/material";
+import "@/assets/styles/app.scss";
 
 const ForgotPasswordPage = () => {
   return (
@@ -10,24 +12,16 @@ const ForgotPasswordPage = () => {
         minHeight: "100vh",
         bgcolor: "linear-gradient(135deg, #e0f7fa 0%, #80deea 100%)",
         padding: "20px",
-        boxSizing: "border-box",
       }}
     >
       <Grid
-        item
-        xs={12}
-        sm={8}
-        md={6}
-        lg={4}
+        size={{ xs: 12, sm: 8, md: 6, lg: 4 }}
         sx={{
           background: "#fff",
           borderRadius: "20px",
           padding: "40px",
           boxShadow: "0px 8px 30px rgba(0, 0, 0, 0.15)",
           transition: "transform 0.3s ease-in-out",
-          "&:hover": {
-            transform: "translateY(-5px)",
-          },
         }}
       >
         <Box
