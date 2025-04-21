@@ -16,6 +16,8 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@mui/material-nextjs": "latest",
+    "@mui/x-data-grid": "^8.0.0",
+    "@mui/x-data-grid-generator": "^8.0.0",
     "@wavesurfer/react": "^1.0.11",
     "antd": "^5.24.7",
     "dotenv": "^16.5.0",

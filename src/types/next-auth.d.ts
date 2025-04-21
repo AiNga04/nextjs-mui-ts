@@ -6,12 +6,15 @@ interface IUser {
   username: string;
   name: string;
   email: string;
+  password: string;
   isVerify: boolean;
   type: string;
   role: string;
   address: string;
   gender: string;
   age: int;
+  createdAt: string;
+  updatedAt: string;
 }
 
 declare module "next-auth/jwt" {

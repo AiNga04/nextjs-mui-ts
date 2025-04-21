@@ -153,7 +153,7 @@ const SidebarComponent = ({ children }: { children: React.ReactNode }) => {
           </MenuItem>
           <MenuItem
             icon={<CloudUploadIcon />}
-            component={<Link href="/admim/upload" />}
+            component={<Link href="/admin/upload" />}
           >
             Upload
           </MenuItem>

@@ -7,8 +7,8 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useSession } from "next-auth/react";
 
-const DashboardContent = () => {
-  const { data: session } = useSession();
+const DashboardContent = (props: any) => {
+  const session = props.session;
   console.log("session", session);
 
   // Mock data for the current user
