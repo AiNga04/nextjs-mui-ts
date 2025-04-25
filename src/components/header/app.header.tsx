@@ -327,7 +327,7 @@ export default function AppHeader() {
                   <Link href="/about">About</Link>
                   <Link href="/playlist">Playlist</Link>
                   <Link href="/likes">Likes</Link>
-                  <Link href="/upload">Upload</Link>
+                  <Link href="/track/upload">Upload</Link>
                   <Avatar
                     onClick={handleProfileMenuOpen}
                     sx={{ cursor: "pointer" }}

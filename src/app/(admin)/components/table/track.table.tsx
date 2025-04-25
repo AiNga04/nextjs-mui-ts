@@ -6,9 +6,9 @@ import { ITracks } from "@/types/next-auth";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ModalViewTrack from "../../admin/tracks/modal/view.track";
-import ModalDeleteTrack from "../../admin/tracks/modal/delete.track";
-import ModalUpdateTrack from "../../admin/tracks/modal/update.track";
+import ModalViewTrack from "@/app/(admin)/admin/tracks/modal/view.track";
+import ModalDeleteTrack from "@/app/(admin)/admin/tracks/modal/delete.track";
+import ModalUpdateTrack from "@/app/(admin)/admin/tracks/modal/update.track";
 
 interface IProps {
   data: ITracks[];

@@ -1,8 +1,13 @@
+import UploadTabs from "@/components/track/upload.tabs";
+import { Container } from "@mui/material";
+import { ToastContainer } from "react-toastify";
+
 const UploadPage = () => {
   return (
-    <div>
-      <h1>Upload Page</h1>
-    </div>
+    <Container maxWidth="lg">
+      <UploadTabs />
+      <ToastContainer />
+    </Container>
   );
 };
 
