@@ -8,7 +8,8 @@ import TableUser from "../../components/table/user.table";
 import { Box, Container, Typography } from "@mui/material";
 import "../../../../assets/styles/app.scss";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import ModalAddNewUser from "./modals/add.new.user";
+import { toast, ToastContainer } from "react-toastify";
+import ModalAddUser from "./modals/add.user";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -30,10 +31,16 @@ const UsersPage = () => {
   const { data: session } = useSession();
   const [users, setUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModalAddUser, setOpenModalAddUser] =
+    React.useState<boolean>(false);
 
-  const handleOpenModalAddNewUser = () => setOpenModal(true);
-  const handleCloseModalAddNewUser = () => setOpenModal(false);
+  const handleCloseModalAddUser = () => {
+    setOpenModalAddUser(false);
+  };
+
+  const handleOpenModalAddUser = () => {
+    setOpenModalAddUser(true);
+  };
 
   async function fetchUsers() {
     if (!session?.access_token) return;
@@ -59,26 +66,6 @@ const UsersPage = () => {
     }
   }
 
-  const handleAddNewUser = async (userData: IUser) => {
-    if (!session?.access_token) return;
-
-    try {
-      const res = await sendRequest<IBackendResponse<IUser>>({
-        url: `${API_URL}/api/v1/users`,
-        method: "POST",
-        body: userData,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-
-      console.log("res", res);
-    } catch (error) {
-      console.error("Error adding user:", error);
-    }
-  };
-
   useEffect(() => {
     if (session?.access_token) {
       fetchUsers();
@@ -99,7 +86,7 @@ const UsersPage = () => {
       >
         Manage Users
         <Box
-          onClick={handleOpenModalAddNewUser}
+          onClick={handleOpenModalAddUser}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -115,12 +102,11 @@ const UsersPage = () => {
         </Box>
       </Typography>
 
-      <TableUser data={users} />
-
-      <ModalAddNewUser
-        open={openModal}
-        onClose={handleCloseModalAddNewUser}
-        onSubmit={handleAddNewUser}
+      <TableUser data={users} fetchUsers={fetchUsers} />
+      <ToastContainer />
+      <ModalAddUser
+        open={openModalAddUser}
+        handleClose={handleCloseModalAddUser}
       />
     </Container>
   );

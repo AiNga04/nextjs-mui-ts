@@ -2,76 +2,73 @@
 import * as React from "react";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, Button, Stack, Tooltip, Box } from "@mui/material";
-import { IUser } from "@/types/next-auth";
+import { ITracks } from "@/types/next-auth";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ModalViewUser from "../../admin/users/modals/view.user";
-import DeleteUserModal from "../../admin/users/modals/delete.user";
-import ModalUpdateUser from "../../admin/users/modals/update.user";
+import ModalViewTrack from "../../admin/tracks/modal/view.track";
+import ModalDeleteTrack from "../../admin/tracks/modal/delete.track";
+import ModalUpdateTrack from "../../admin/tracks/modal/update.track";
+
 interface IProps {
-  data: IUser[];
-  fetchUsers: () => void;
+  data: ITracks[];
+  fetchTracks: () => void;
 }
 
-export default function TableUser(props: IProps) {
-  const { data } = props;
+export default function TableTracks(props: IProps) {
+  const { data, fetchTracks } = props;
   const [openModalView, setOpenModalView] = React.useState<boolean>(false);
   const [openModalDelete, setOpenModalDelete] = React.useState<boolean>(false);
-  const [openModalUpdateUser, setOpenModalUpdateUser] =
-    React.useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = React.useState<IUser | undefined>(
+  const [openModalUpdate, setOpenModalUpdate] = React.useState<boolean>(false);
+  const [selectedTrack, setSelectedTrack] = React.useState<ITracks | undefined>(
     undefined
   );
-  const fetchUsers = props.fetchUsers;
 
   const handleCloseModalView = () => {
     setOpenModalView(false);
-    setSelectedUser(undefined);
+    setSelectedTrack(undefined);
   };
 
-  const handleOpenModalView = (user: IUser) => {
-    setSelectedUser(user);
+  const handleOpenModalView = (track: ITracks) => {
+    setSelectedTrack(track);
     setOpenModalView(true);
   };
 
   const handleCloseModalDelete = () => {
     setOpenModalDelete(false);
-    setSelectedUser(undefined);
-    fetchUsers();
+    setSelectedTrack(undefined);
+    fetchTracks();
   };
 
-  const handleCloseModalUpdateUser = () => {
-    setOpenModalUpdateUser(false);
-    setSelectedUser(undefined);
-    fetchUsers();
-  };
-
-  const handleOpenModalDelete = (user: IUser) => {
-    console.log("Delete user:", user);
-    setSelectedUser(user);
+  const handleOpenModalDelete = (track: ITracks) => {
+    setSelectedTrack(track);
     setOpenModalDelete(true);
   };
 
-  const handleOpenModalUpdateUser = (user: IUser) => {
-    console.log("Update user:", user);
-    setSelectedUser(user);
-    setOpenModalUpdateUser(true);
+  const handleCloseModalUpdate = () => {
+    setOpenModalUpdate(false);
+    setSelectedTrack(undefined);
+    fetchTracks();
   };
 
-  // Add index to each row for the "No" column
-  const rows = data.map((user, index) => ({
-    id: user._id,
+  const handleOpenModalUpdate = (track: ITracks) => {
+    setSelectedTrack(track);
+    setOpenModalUpdate(true);
+  };
+
+  const rows = data.map((track, index) => ({
+    id: track._id,
     no: index + 1,
-    name: user.name,
-    username: user.username,
-    email: user.email,
-    address: user.address,
-    role: user.role,
-    gender: user.gender,
-    age: user.age,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
+    title: track.title,
+    description: track.description,
+    category: track.category,
+    imgUrl: track.imgUrl,
+    trackUrl: track.trackUrl,
+    countLike: track.countLike,
+    countPlay: track.countPlay,
+    uploader: track.uploader?.name || "Unknown",
+    createdAt: track.createdAt,
+    updatedAt: track.updatedAt,
   }));
 
   const columns: GridColDef[] = [
@@ -83,49 +80,36 @@ export default function TableUser(props: IProps) {
       headerAlign: "center",
     },
     {
-      field: "name",
-      headerName: "Name",
+      field: "title",
+      headerName: "Title",
       width: 200,
       flex: 1,
     },
     {
-      field: "email",
-      headerName: "Email",
-      width: 250,
+      field: "category",
+      headerName: "Category",
+      width: 150,
       flex: 1,
     },
     {
-      field: "address",
-      headerName: "Address",
-      width: 250,
-      flex: 1,
-    },
-    {
-      field: "role",
-      headerName: "Role",
-      width: 120,
+      field: "countLike",
+      headerName: "Likes",
+      width: 100,
       align: "center",
       headerAlign: "center",
-      renderCell: (params: GridRenderCellParams) => {
-        return (
-          <Box
-            sx={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Chip
-              label={params.value as string}
-              color={params.value === "ADMIN" ? "primary" : "default"}
-              variant="outlined"
-              size="small"
-            />
-          </Box>
-        );
-      },
+    },
+    {
+      field: "countPlay",
+      headerName: "Plays",
+      width: 100,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "uploader",
+      headerName: "Uploader",
+      width: 150,
+      flex: 1,
     },
     {
       field: "actions",
@@ -136,7 +120,7 @@ export default function TableUser(props: IProps) {
       align: "center",
       headerAlign: "center",
       renderCell: (params: GridRenderCellParams) => {
-        const user = params.row as IUser;
+        const track = params.row as ITracks;
         return (
           <Box
             sx={{
@@ -158,7 +142,7 @@ export default function TableUser(props: IProps) {
                   size="small"
                   variant="outlined"
                   color="info"
-                  onClick={() => handleOpenModalView(user)}
+                  onClick={() => handleOpenModalView(track)}
                   sx={{
                     minWidth: "40px",
                     width: "40px",
@@ -177,7 +161,7 @@ export default function TableUser(props: IProps) {
                   size="small"
                   variant="outlined"
                   color="primary"
-                  onClick={() => handleOpenModalUpdateUser(user)}
+                  onClick={() => handleOpenModalUpdate(track)}
                   sx={{
                     minWidth: "40px",
                     width: "40px",
@@ -196,7 +180,7 @@ export default function TableUser(props: IProps) {
                   size="small"
                   variant="outlined"
                   color="error"
-                  onClick={() => handleOpenModalDelete(user)}
+                  onClick={() => handleOpenModalDelete(track)}
                   sx={{
                     minWidth: "40px",
                     width: "40px",
@@ -263,21 +247,22 @@ export default function TableUser(props: IProps) {
         }}
       />
 
-      <ModalViewUser
+      <ModalViewTrack
         open={openModalView}
         handleClose={handleCloseModalView}
-        user={selectedUser}
+        track={selectedTrack}
       />
-
-      <DeleteUserModal
+      <ModalDeleteTrack
         open={openModalDelete}
         handleClose={handleCloseModalDelete}
-        user={selectedUser}
+        track={selectedTrack}
+        fetchTracks={fetchTracks}
       />
-      <ModalUpdateUser
-        open={openModalUpdateUser}
-        handleClose={handleCloseModalUpdateUser}
-        user={selectedUser}
+      <ModalUpdateTrack
+        open={openModalUpdate}
+        handleClose={handleCloseModalUpdate}
+        track={selectedTrack}
+        fetchTracks={fetchTracks}
       />
     </Box>
   );

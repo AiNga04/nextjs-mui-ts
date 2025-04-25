@@ -1,47 +1,146 @@
-# Material UI - Next.js App Router example in TypeScript
+# Zyna Music - Ứng dụng Streaming Nhạc
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped using [`create-next-app`](https://github.com/vercel/next.js/tree/HEAD/packages/create-next-app) with Material UI installed.
+## 📖 Giới thiệu
 
-## How to use
+Zyna Music là một ứng dụng streaming nhạc được xây dựng với Next.js, Material UI và TypeScript. Ứng dụng cung cấp trải nghiệm nghe nhạc tuyệt vời với giao diện người dùng hiện đại và đầy đủ tính năng.
 
-Download the example [or clone the repo](https://github.com/mui/material-ui):
+## ✨ Tính năng chính
 
-<!-- #repo-reference -->
+- 🎵 Phát nhạc trực tuyến với việc hiển thị sóng âm (Waveform)
+- 👤 Xác thực người dùng (Đăng nhập/Đăng ký)
+- 📱 Giao diện responsive
+- 📂 Quản lý playlist
+- ❤️ Yêu thích bài hát
+- 🎨 Tùy chỉnh giao diện (Theme)
+- 👑 Trang quản trị (Admin Dashboard)
 
-```bash
-curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2  material-ui-master/examples/material-ui-nextjs-ts
-cd material-ui-nextjs-ts
+## 🛠️ Công nghệ sử dụng
+
+- **Frontend:**
+
+  - Next.js 14
+  - Material UI
+  - TypeScript
+  - SCSS
+  - React Query
+  - NextAuth.js
+  - Wavesurfer.js
+
+- **Kiến trúc:**
+  - App Router
+  - Server Components
+  - Client Components
+  - API Routes
+
+## 📁 Cấu trúc thư mục
+
+```
+src/
+├── app/                  # App router và các pages
+│   ├── (admin)/         # Admin pages và components
+│   ├── (guest)/         # Guest pages (auth)
+│   └── (user)/          # User pages
+├── assets/              # Tài nguyên tĩnh
+├── components/          # Shared components
+├── lib/                 # Utilities
+├── types/              # TypeScript types
+└── utils/              # Helper functions
 ```
 
-Install it and run:
+## 🚀 Cài đặt và Chạy Dự án
 
-```bash
-npm install
-npm run dev
-```
+1. **Clone dự án:**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   ```bash
+   git clone <repository-url>
+   cd zyna-music
+   ```
 
-or:
+2. **Cài đặt dependencies:**
 
-<!-- #repo-reference -->
+   ```bash
+   npm install
+   ```
 
-[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/material-ui-nextjs-ts)
+3. **Cấu hình môi trường:**
+   Tạo file .env.local với các biến môi trường:
 
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/mui/material-ui/tree/master/examples/material-ui-nextjs-ts)
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   NEXTAUTH_URL=http://localhost:3000
+   NEXTAUTH_SECRET=your-secret-key
+   ```
 
-## Learn more
+4. **Khởi chạy development server:**
+   ```bash
+   npm run dev
+   ```
 
-To learn more about this example:
+## 👤 Tính năng theo vai trò
 
-<!-- #host-reference -->
+### Người dùng
 
-- [Next.js documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Customizing Material UI](https://mui.com/material-ui/customization/how-to-customize/) - approaches to customizing Material UI.
+- Đăng nhập/Đăng ký tài khoản
+- Nghe nhạc với visualizer
+- Tạo và quản lý playlist
+- Yêu thích bài hát
+- Cập nhật thông tin cá nhân
 
-## What's next?
+### Admin
 
-<!-- #host-reference -->
+- Quản lý người dùng (CRUD)
+- Xem thống kê
+- Quản lý nội dung
+- Cấu hình hệ thống
 
-You now have a working example project.
-You can head back to the documentation and continue by browsing the [templates](https://mui.com/material-ui/getting-started/templates/) section.
+## 💻 API Endpoints
+
+### Auth
+
+- POST `/api/auth/signin` - Đăng nhập
+- POST `/api/auth/signup` - Đăng ký
+- POST `/api/auth/forgot-password` - Quên mật khẩu
+
+### Users
+
+- GET `/api/users` - Lấy danh sách người dùng
+- POST `/api/users` - Tạo người dùng mới
+- PUT `/api/users/:id` - Cập nhật người dùng
+- DELETE `/api/users/:id` - Xóa người dùng
+
+### Tracks
+
+- GET `/api/tracks` - Lấy danh sách bài hát
+- POST `/api/tracks` - Upload bài hát mới
+- GET `/api/tracks/:id` - Chi tiết bài hát
+- DELETE `/api/tracks/:id` - Xóa bài hát
+
+## 🔒 Bảo mật
+
+- Xác thực với NextAuth.js
+- JWT cho API calls
+- Role-based access control
+- Form validation
+- API rate limiting
+
+## 🎯 Tối ưu hóa
+
+- Server-side rendering
+- Image optimization
+- Code splitting
+- Lazy loading
+- Caching
+
+## 🤝 Đóng góp
+
+Đóng góp luôn được chào đón! Vui lòng:
+
+1. Fork dự án
+2. Tạo branch (`git checkout -b feature/AmazingFeature`)
+3. Commit (`git commit -m 'Add AmazingFeature'`)
+4. Push (`git push origin feature/AmazingFeature`)
+5. Tạo Pull Request
+
+## 📜 License
+
+Dự án được phân phối dưới giấy phép MIT.

@@ -1,89 +1,99 @@
 "use client";
-import * as React from "react";
-import { useState } from "react";
+import { IUser } from "@/types/next-auth";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Typography,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
-import { IUser } from "@/types/next-auth";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { sendRequest } from "@/utils/api";
+import { useSession } from "next-auth/react";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 interface ModalDeleteUserProps {
   open: boolean;
   handleClose: () => void;
-  user?: IUser; // Optional, since the modal might open without a user initially
-  onDelete: (userId: string) => Promise<void>;
+  user?: IUser;
 }
 
-const ModalDeleteUser: React.FC<ModalDeleteUserProps> = ({
+interface IBackendRes {
+  status: number;
+  message: string;
+  data: any;
+}
+
+const DeleteUserModal: React.FC<ModalDeleteUserProps> = ({
   open,
   handleClose,
   user,
-  onDelete,
 }) => {
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
 
-  const handleConfirmDelete = async () => {
-    if (!user?._id) return;
+  const handleDelete = async () => {
+    if (!user || !session?.access_token) {
+      toast.error("Invalid user or session. Please try again.");
+      return;
+    }
 
-    setIsDeleting(true);
     try {
-      await onDelete(user._id);
-      handleClose(); // Close the modal on successful deletion
-    } catch (err) {
-      console.error("Error deleting user:", err);
+      setLoading(true);
+      const res = await sendRequest<IBackendRes>({
+        //@ts-ignore
+        url: `${API_URL}/api/v1/users/${user.id}`,
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      toast.success(res.message || "User deleted successfully!");
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to delete user. Please try again.");
+      console.error("Delete user error:", error);
     } finally {
-      setIsDeleting(false);
+      setLoading(false);
     }
   };
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ display: "flex", justifyContent: "space-between" }}>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         Delete User
-        <Button onClick={handleClose} color="secondary">
+        <Button onClick={handleClose} color="secondary" disabled={loading}>
           <ClearIcon />
         </Button>
       </DialogTitle>
       <DialogContent>
-        <Typography align="center" color="textSecondary" sx={{ mt: 2, mb: 3 }}>
-          Are you sure you want to delete the user{" "}
-          <strong>{user?.name || "Unknown"}</strong>? This action cannot be
-          undone.
+        <Typography sx={{ mb: 2 }}>
+          Are you sure you want to delete <strong>{user?.email}</strong>? This
+          action cannot be undone.
         </Typography>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          color="secondary"
-          sx={{
-            borderRadius: "10px",
-          }}
-        >
+        <Button onClick={handleClose} color="primary" disabled={loading}>
           Cancel
         </Button>
-        <Button
-          onClick={handleConfirmDelete}
-          variant="contained"
-          color="error"
-          disabled={isDeleting || !user?._id}
-          sx={{
-            borderRadius: "10px",
-            bgcolor: "#d32f2f",
-            "&:hover": {
-              bgcolor: "#b71c1c",
-            },
-          }}
-        >
-          {isDeleting ? "Deleting..." : "Delete"}
+        <Button onClick={handleDelete} color="error" disabled={loading}>
+          {loading ? "Deleting..." : "Delete"}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default ModalDeleteUser;
+export default DeleteUserModal;
