@@ -7,7 +7,6 @@ import {
   Grid,
   Card,
   Stack,
-  IconButton,
   Button,
   Chip,
 } from "@mui/material";
@@ -20,6 +19,7 @@ import SpeedIcon from "@mui/icons-material/Speed";
 import StorageIcon from "@mui/icons-material/Storage";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 
+// Keyframes for animations
 const moveBackground = keyframes`
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -32,13 +32,24 @@ const floatAnimation = keyframes`
 `;
 
 const rippleAnimation = keyframes`
-  0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(2.5); opacity: 0; }
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(3); opacity: 0; }
 `;
 
+const pulseAnimation = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+`;
+const glowAnimation = keyframes`
+  0% { box-shadow: 0 0 5px rgba(0, 198, 255, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(0, 198, 255, 0.6); }
+  100% { box-shadow: 0 0 5px rgba(0, 198, 255, 0.3); }
+`;
+
+// Styled Components
 const StyledContainer = styled(Container)({
   position: "relative",
-  zIndex: 1,
   "&::before": {
     content: '""',
     position: "fixed",
@@ -57,6 +68,11 @@ const GradientText = styled(Typography)({
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   animation: `${moveBackground} 5s linear infinite`,
+  transition: "text-shadow 0.3s ease",
+  "&:hover": {
+    textShadow: "0 0 15px rgba(0, 198, 255, 0.8)",
+    animation: `${moveBackground} 2s linear infinite`, // Speed up on hover
+  },
 });
 
 const FeatureCard = styled(Card)({
@@ -69,16 +85,29 @@ const FeatureCard = styled(Card)({
   position: "relative",
   overflow: "hidden",
   "&:hover": {
-    transform: "translateY(-10px)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
+    transform: "translateY(-10px) scale(1.02)",
+    border: "1px solid rgba(0, 198, 255, 0.5)",
+    background:
+      "linear-gradient(45deg, rgba(0, 198, 255, 0.05), rgba(0, 114, 255, 0.05))",
+    animation: `${glowAnimation} 1.5s ease-in-out infinite`,
     "& .ripple": {
-      animation: `${rippleAnimation} 1s cubic-bezier(0, 0, 0.2, 1) infinite`,
+      animation: `${rippleAnimation} 1.2s cubic-bezier(0, 0, 0.2, 1) infinite`,
+    },
+    "& .feature-icon": {
+      transform: "scale(1.2) ",
     },
   },
 });
 
 const FloatingElement = styled(Box)({
   animation: `${floatAnimation} 3s ease-in-out infinite`,
+  transition: "transform 0.3s ease",
+  "&:hover": {
+    animation: `${pulseAnimation} 0.8s ease-in-out`,
+    "& .music-icon": {
+      transform: "rotate(20deg)", // Rotate music note on hover
+    },
+  },
 });
 
 const GlowingButton = styled(Button)({
@@ -90,8 +119,10 @@ const GlowingButton = styled(Button)({
   boxShadow: "0 3px 5px 2px rgba(0, 198, 255, .3)",
   transition: "all 0.3s ease",
   "&:hover": {
-    transform: "scale(1.05)",
-    boxShadow: "0 6px 10px 4px rgba(0, 198, 255, .4)",
+    transform: "scale(1.05) skew(-2deg)", // Add skew for playful effect
+    boxShadow: "0 6px 15px 4px rgba(0, 198, 255, .5)",
+    animation: `${pulseAnimation} 0.6s ease-in-out`,
+    background: "linear-gradient(45deg, #0072FF 30%, #00C6FF 90%)", // Reverse gradient
   },
 });
 
@@ -101,9 +132,16 @@ const StatsChip = styled(Chip)({
   border: "1px solid rgba(255, 255, 255, 0.1)",
   borderRadius: "15px",
   padding: "20px 10px",
+  transition: "all 0.3s ease",
   "& .MuiChip-label": {
     fontSize: "1.1rem",
     padding: "0 16px",
+  },
+  "&:hover": {
+    transform: "translateY(-5px)",
+    background: "rgba(0, 198, 255, 0.1)",
+    border: "1px solid rgba(0, 198, 255, 0.4)",
+    animation: `${glowAnimation} 1.5s ease-in-out infinite`,
   },
 });
 
@@ -116,27 +154,64 @@ const AboutPage = () => {
 
   const features = [
     {
-      icon: <CloudIcon sx={{ fontSize: 40, color: "#00C6FF" }} />,
+      icon: (
+        <CloudIcon
+          className="feature-icon"
+          sx={{
+            fontSize: 40,
+            color: "#00C6FF",
+            transition: "transform 0.3s ease",
+          }}
+        />
+      ),
       title: "Cloud Streaming",
       description:
         "Stream your music from anywhere in the world with our cloud infrastructure",
     },
     {
-      icon: <SpeedIcon sx={{ fontSize: 40, color: "#0072FF" }} />,
+      icon: (
+        <SpeedIcon
+          className="feature-icon"
+          sx={{
+            fontSize: 40,
+            color: "#0072FF",
+            transition: "transform 0.3s ease",
+          }}
+        />
+      ),
       title: "High Performance",
       description:
         "Lightning-fast streaming with minimal latency and buffer time",
     },
     {
-      icon: <StorageIcon sx={{ fontSize: 40, color: "#00C6FF" }} />,
+      icon: (
+        <StorageIcon
+          className="feature-icon"
+          sx={{
+            fontSize: 40,
+            color: "#00C6FF",
+            transition: "transform 0.3s ease",
+          }}
+        />
+      ),
       title: "Unlimited Storage",
       description:
         "Store your entire music collection without worrying about space",
     },
     {
-      icon: <PeopleIcon sx={{ fontSize: 40, color: "#0072FF" }} />,
+      icon: (
+        <PeopleIcon
+          className="feature-icon"
+          sx={{
+            fontSize: 40,
+            color: "#0072FF",
+            transition: "transform 0.3s ease",
+          }}
+        />
+      ),
       title: "Social Features",
-      description: "Connect with friends and share your favorite music",
+      description:
+        "Connect with your friends and share all of your favorite songs and playlists.",
     },
   ];
 
@@ -160,7 +235,15 @@ const AboutPage = () => {
         <Stack spacing={8} alignItems="center" sx={{ mb: 15 }}>
           <Box sx={{ textAlign: "center", maxWidth: 900, mx: "auto" }}>
             <FloatingElement>
-              <MusicNoteIcon sx={{ fontSize: 60, color: "#00C6FF", mb: 3 }} />
+              <MusicNoteIcon
+                className="music-icon"
+                sx={{
+                  fontSize: 60,
+                  color: "#00C6FF",
+                  mb: 3,
+                  transition: "transform 0.3s ease",
+                }}
+              />
             </FloatingElement>
             <GradientText
               variant="h1"
@@ -208,6 +291,7 @@ const AboutPage = () => {
                   border: "2px solid #00C6FF",
                   "&:hover": {
                     border: "2px solid #0072FF",
+                    animation: `${pulseAnimation} 0.6s ease-in-out`,
                   },
                 }}
               >
@@ -228,7 +312,10 @@ const AboutPage = () => {
                 <StatsChip
                   key={index}
                   label={stat}
-                  sx={{ minWidth: { xs: "100%", sm: "200px" } }}
+                  sx={{
+                    minWidth: { xs: "100%", sm: "200px" },
+                    color: "#00C6FF",
+                  }}
                 />
               )
             )}
@@ -238,21 +325,22 @@ const AboutPage = () => {
         {/* Features Grid */}
         <Grid container spacing={4} sx={{ mb: 15 }}>
           {features.map((feature, index) => (
-            <Grid sx={{ xs: 12, sm: 6 }} key={index}>
+            <Grid size={{ xs: 12, sm: 6 }} key={index}>
               <FeatureCard>
                 <Stack direction="row" spacing={3} alignItems="flex-start">
-                  <Box sx={{ mt: 1 }}>
+                  <Box sx={{ mt: 1, position: "relative" }}>
                     {feature.icon}
                     <Box
                       className="ripple"
                       sx={{
                         position: "absolute",
-                        top: "40px",
-                        left: "40px",
+                        top: "50%",
+                        left: "50%",
                         width: "40px",
                         height: "40px",
                         borderRadius: "50%",
-                        background: "rgba(0, 198, 255, 0.2)",
+                        background: "rgba(0, 198, 255, 0.3)",
+                        transform: "translate(-50%, -50%)",
                       }}
                     />
                   </Box>
@@ -294,6 +382,11 @@ const AboutPage = () => {
             borderRadius: "30px",
             p: { xs: 4, md: 8 },
             border: "1px solid rgba(255, 255, 255, 0.05)",
+            transition: "all 0.3s ease",
+            "&:hover": {
+              border: "1px solid rgba(0, 198, 255, 0.3)",
+              background: "rgba(0, 198, 255, 0.02)",
+            },
           }}
         >
           <Typography
