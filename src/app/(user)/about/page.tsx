@@ -41,10 +41,11 @@ const pulseAnimation = keyframes`
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 `;
+
 const glowAnimation = keyframes`
-  0% { box-shadow: 0 0 5px rgba(0, 198, 255, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(0, 198, 255, 0.6); }
-  100% { box-shadow: 0 0 5px rgba(0, 198, 255, 0.3); }
+  0% { box-shadow: 0 0 5px rgba(2, 136, 209, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(2, 136, 209, 0.6); }
+  100% { box-shadow: 0 0 5px rgba(2, 136, 209, 0.3); }
 `;
 
 // Styled Components
@@ -57,44 +58,44 @@ const StyledContainer = styled(Container)({
     left: 0,
     right: 0,
     bottom: 0,
-    background: "linear-gradient(120deg, #001E3C 0%, #0A1929 100%)",
+    background: "linear-gradient(120deg, #E0F7FA 0%, #B2EBF2 100%)",
     zIndex: -1,
   },
 });
 
 const GradientText = styled(Typography)({
-  background: "linear-gradient(90deg, #00C6FF 0%, #0072FF 50%, #00C6FF 100%)",
+  background: "linear-gradient(90deg, #0288D1 0%, #FF4081 50%, #0288D1 100%)",
   backgroundSize: "200% auto",
   WebkitBackgroundClip: "text",
   WebkitTextFillColor: "transparent",
   animation: `${moveBackground} 5s linear infinite`,
   transition: "text-shadow 0.3s ease",
   "&:hover": {
-    textShadow: "0 0 15px rgba(0, 198, 255, 0.8)",
-    animation: `${moveBackground} 2s linear infinite`, // Speed up on hover
+    textShadow: "0 0 15px rgba(2, 136, 209, 0.8)",
+    animation: `${moveBackground} 2s linear infinite`,
   },
 });
 
 const FeatureCard = styled(Card)({
-  background: "rgba(255, 255, 255, 0.03)",
+  background: "rgba(255, 255, 255, 0.9)",
   backdropFilter: "blur(10px)",
   borderRadius: "20px",
   padding: "32px",
-  border: "1px solid rgba(255, 255, 255, 0.1)",
+  border: "1px solid rgba(2, 136, 209, 0.2)",
   transition: "all 0.3s ease",
   position: "relative",
   overflow: "hidden",
   "&:hover": {
     transform: "translateY(-10px) scale(1.02)",
-    border: "1px solid rgba(0, 198, 255, 0.5)",
+    border: "1px solid rgba(2, 136, 209, 0.5)",
     background:
-      "linear-gradient(45deg, rgba(0, 198, 255, 0.05), rgba(0, 114, 255, 0.05))",
+      "linear-gradient(45deg, rgba(2, 136, 209, 0.1), rgba(255, 64, 129, 0.1))",
     animation: `${glowAnimation} 1.5s ease-in-out infinite`,
     "& .ripple": {
       animation: `${rippleAnimation} 1.2s cubic-bezier(0, 0, 0.2, 1) infinite`,
     },
     "& .feature-icon": {
-      transform: "scale(1.2) ",
+      transform: "scale(1.2)",
     },
   },
 });
@@ -105,31 +106,31 @@ const FloatingElement = styled(Box)({
   "&:hover": {
     animation: `${pulseAnimation} 0.8s ease-in-out`,
     "& .music-icon": {
-      transform: "rotate(20deg)", // Rotate music note on hover
+      transform: "rotate(20deg)",
     },
   },
 });
 
 const GlowingButton = styled(Button)({
-  background: "linear-gradient(45deg, #00C6FF 30%, #0072FF 90%)",
+  background: "linear-gradient(45deg, #0288D1 30%, #FF4081 90%)",
   borderRadius: "30px",
   border: 0,
   color: "white",
   padding: "12px 30px",
-  boxShadow: "0 3px 5px 2px rgba(0, 198, 255, .3)",
+  boxShadow: "0 3px 5px 2px rgba(2, 136, 209, 0.3)",
   transition: "all 0.3s ease",
   "&:hover": {
-    transform: "scale(1.05) skew(-2deg)", // Add skew for playful effect
-    boxShadow: "0 6px 15px 4px rgba(0, 198, 255, .5)",
+    transform: "scale(1.05) skew(-2deg)",
+    boxShadow: "0 6px 15px 4px rgba(2, 136, 209, 0.5)",
     animation: `${pulseAnimation} 0.6s ease-in-out`,
-    background: "linear-gradient(45deg, #0072FF 30%, #00C6FF 90%)", // Reverse gradient
+    background: "linear-gradient(45deg, #FF4081 30%, #0288D1 90%)",
   },
 });
 
 const StatsChip = styled(Chip)({
-  background: "rgba(255, 255, 255, 0.05)",
+  background: "rgba(255, 255, 255, 0.8)",
   backdropFilter: "blur(5px)",
-  border: "1px solid rgba(255, 255, 255, 0.1)",
+  border: "1px solid rgba(2, 136, 209, 0.2)",
   borderRadius: "15px",
   padding: "20px 10px",
   transition: "all 0.3s ease",
@@ -139,8 +140,8 @@ const StatsChip = styled(Chip)({
   },
   "&:hover": {
     transform: "translateY(-5px)",
-    background: "rgba(0, 198, 255, 0.1)",
-    border: "1px solid rgba(0, 198, 255, 0.4)",
+    background: "rgba(2, 136, 209, 0.2)",
+    border: "1px solid rgba(2, 136, 209, 0.4)",
     animation: `${glowAnimation} 1.5s ease-in-out infinite`,
   },
 });
@@ -159,7 +160,7 @@ const AboutPage = () => {
           className="feature-icon"
           sx={{
             fontSize: 40,
-            color: "#00C6FF",
+            color: "#0288D1",
             transition: "transform 0.3s ease",
           }}
         />
@@ -174,7 +175,7 @@ const AboutPage = () => {
           className="feature-icon"
           sx={{
             fontSize: 40,
-            color: "#0072FF",
+            color: "#FF4081",
             transition: "transform 0.3s ease",
           }}
         />
@@ -189,7 +190,7 @@ const AboutPage = () => {
           className="feature-icon"
           sx={{
             fontSize: 40,
-            color: "#00C6FF",
+            color: "#0288D1",
             transition: "transform 0.3s ease",
           }}
         />
@@ -204,7 +205,7 @@ const AboutPage = () => {
           className="feature-icon"
           sx={{
             fontSize: 40,
-            color: "#0072FF",
+            color: "#FF4081",
             transition: "transform 0.3s ease",
           }}
         />
@@ -227,7 +228,7 @@ const AboutPage = () => {
         pt: { xs: 8, md: 12 },
         pb: 8,
         overflow: "hidden",
-        background: "linear-gradient(135deg, #0A1929 0%, #001E3C 100%)",
+        background: "linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%)",
       }}
     >
       <StyledContainer maxWidth="lg">
@@ -239,7 +240,7 @@ const AboutPage = () => {
                 className="music-icon"
                 sx={{
                   fontSize: 60,
-                  color: "#00C6FF",
+                  color: "#0288D1",
                   mb: 3,
                   transition: "transform 0.3s ease",
                 }}
@@ -259,7 +260,7 @@ const AboutPage = () => {
             <Typography
               variant="h5"
               sx={{
-                color: "rgba(255, 255, 255, 0.7)",
+                color: "#333",
                 mb: 5,
                 lineHeight: 1.8,
                 fontSize: { xs: "1.1rem", sm: "1.3rem" },
@@ -288,9 +289,11 @@ const AboutPage = () => {
                 size="large"
                 sx={{
                   background: "transparent",
-                  border: "2px solid #00C6FF",
+                  border: "2px solid #0288D1",
+                  color: "#0288D1",
                   "&:hover": {
-                    border: "2px solid #0072FF",
+                    border: "2px solid #FF4081",
+                    color: "#FFF",
                     animation: `${pulseAnimation} 0.6s ease-in-out`,
                   },
                 }}
@@ -314,7 +317,7 @@ const AboutPage = () => {
                   label={stat}
                   sx={{
                     minWidth: { xs: "100%", sm: "200px" },
-                    color: "#00C6FF",
+                    color: "#0288D1",
                   }}
                 />
               )
@@ -339,7 +342,7 @@ const AboutPage = () => {
                         width: "40px",
                         height: "40px",
                         borderRadius: "50%",
-                        background: "rgba(0, 198, 255, 0.3)",
+                        background: "rgba(2, 136, 209, 0.3)",
                         transform: "translate(-50%, -50%)",
                       }}
                     />
@@ -350,7 +353,7 @@ const AboutPage = () => {
                       sx={{
                         fontWeight: 600,
                         mb: 2,
-                        background: "linear-gradient(45deg, #00C6FF, #0072FF)",
+                        background: "linear-gradient(45deg, #0288D1, #FF4081)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                       }}
@@ -360,7 +363,7 @@ const AboutPage = () => {
                     <Typography
                       variant="body1"
                       sx={{
-                        color: "rgba(255, 255, 255, 0.7)",
+                        color: "#333",
                         lineHeight: 1.7,
                       }}
                     >
@@ -377,15 +380,15 @@ const AboutPage = () => {
         <Box
           sx={{
             textAlign: "center",
-            background: "rgba(255, 255, 255, 0.02)",
+            background: "rgba(255, 255, 255, 0.8)",
             backdropFilter: "blur(10px)",
             borderRadius: "30px",
             p: { xs: 4, md: 8 },
-            border: "1px solid rgba(255, 255, 255, 0.05)",
+            border: "1px solid rgba(2, 136, 209, 0.2)",
             transition: "all 0.3s ease",
             "&:hover": {
-              border: "1px solid rgba(0, 198, 255, 0.3)",
-              background: "rgba(0, 198, 255, 0.02)",
+              border: "1px solid rgba(2, 136, 209, 0.4)",
+              background: "rgba(2, 136, 209, 0.1)",
             },
           }}
         >
@@ -394,7 +397,7 @@ const AboutPage = () => {
             sx={{
               fontWeight: 700,
               mb: 3,
-              background: "linear-gradient(45deg, #00C6FF, #0072FF)",
+              background: "linear-gradient(45deg, #0288D1, #FF4081)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
@@ -404,7 +407,7 @@ const AboutPage = () => {
           <Typography
             variant="h6"
             sx={{
-              color: "rgba(255, 255, 255, 0.7)",
+              color: "#333",
               mb: 4,
               maxWidth: 600,
               mx: "auto",
