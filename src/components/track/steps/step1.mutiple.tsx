@@ -2,7 +2,7 @@
 import React, { useCallback } from "react";
 import { useDropzone, FileWithPath } from "react-dropzone";
 import "./theme.scss";
-import InputFileUpload from "@/components/button/upload.btn";
+import { InputAudioFileUpload } from "@/components/button/upload.btn";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 
@@ -67,7 +67,7 @@ const Step1 = () => {
             event.preventDefault();
           }}
         >
-          <InputFileUpload />
+          <InputAudioFileUpload />
         </div>
         <p>Drag files here or select to upload</p>
       </div>

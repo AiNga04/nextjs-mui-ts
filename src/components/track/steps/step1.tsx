@@ -2,7 +2,7 @@
 import React, { useCallback } from "react";
 import { useDropzone, FileWithPath } from "react-dropzone";
 import "./theme.scss";
-import InputFileUpload from "@/components/button/upload.btn";
+import { InputAudioFileUpload } from "@/components/button/upload.btn";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -34,18 +34,18 @@ const Step1 = (props: IProps) => {
           setValue(1);
           setTrackUpload({});
 
-          const formData = new FormData();
-          formData.append("fileUpload", file);
+          const files = new FormData();
+          files.append("fileUpload", file);
 
           try {
             const res = await axios.post(
               "http://localhost:8000/api/v1/files/upload",
-              formData,
+              files,
               {
                 headers: {
                   Authorization: `Bearer ${session?.access_token}`,
                   target_type: "tracks",
-                  delay: 5000,
+                  delay: 3000,
                 },
                 onUploadProgress: (progressEvent) => {
                   let percentCompleted = Math.floor(
@@ -59,7 +59,12 @@ const Step1 = (props: IProps) => {
                 },
               }
             );
-            console.log(">>> check audio: ", res.data.data.fileName);
+
+            console.log(">>> check res: ", res.data.data.fileName);
+            setTrackUpload((prev: any) => ({
+              ...prev,
+              resFileName: res.data.data.fileName,
+            }));
           } catch (error) {
             //@ts-ignore
             toast.error(error?.response?.data?.message);
@@ -95,7 +100,7 @@ const Step1 = (props: IProps) => {
             event.preventDefault();
           }}
         >
-          <InputFileUpload />
+          <InputAudioFileUpload />
         </div>
         <p>Drag files here or select to upload</p>
       </div>

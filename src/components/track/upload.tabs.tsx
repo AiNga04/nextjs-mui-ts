@@ -32,6 +32,7 @@ export default function UploadTabs() {
   const [trackUpload, setTrackUpload] = React.useState({
     fileName: "",
     percent: 0,
+    resFileName: "",
   });
   const [value, setValue] = React.useState(0);
 

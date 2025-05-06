@@ -34,12 +34,12 @@ export default function LinearWithValueLabel(props: IProps) {
       ? Math.max(0, Math.min(100, percentProps))
       : 0;
 
-  console.log(
-    ">>> check percentProps: ",
-    percentProps,
-    "progressValue: ",
-    progressValue
-  );
+  // console.log(
+  //   ">>> check percentProps: ",
+  //   percentProps,
+  //   "progressValue: ",
+  //   progressValue
+  // );
 
   return (
     <Box sx={{ width: "100%" }}>

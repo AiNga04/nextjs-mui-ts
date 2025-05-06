@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col } from "antd";
 import {
   Box,
@@ -13,7 +13,10 @@ import {
   Typography,
 } from "@mui/material";
 import LinearWithValueLabel from "@/components/progress/progress";
-import InputFileUpload from "@/components/button/upload.btn";
+import { InputImageFileUpload } from "@/components/button/upload.btn";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 interface IFormData {
   title: string;
@@ -27,11 +30,13 @@ interface IProps {
   trackUpload: {
     fileName: string;
     percent: number;
+    resFileName: string;
   };
 }
 
 const Step2 = (props: IProps) => {
   const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
   const [formData, setFormData] = useState<IFormData>({
     title: "",
     description: "",
@@ -40,6 +45,18 @@ const Step2 = (props: IProps) => {
     trackUrl: "",
   });
   const { trackUpload } = props;
+  const [image, setImage] = useState<String>("");
+
+  console.log(">>> check trackUpload: ", trackUpload);
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      imgUrl: image as string,
+      trackUrl: trackUpload.resFileName,
+    }));
+  }, [image, trackUpload]);
+
   console.log(">>> check trackUpload: ", trackUpload);
 
   const handleChange = (
@@ -60,6 +77,31 @@ const Step2 = (props: IProps) => {
     }));
   };
 
+  const handleSubmit = async () => {
+    console.log(">>> check formData: ", formData);
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/tracks`,
+        {
+          ...formData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      console.log(">>> check audio: ", res.data.data.fileName);
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error("Error uploading track");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Box sx={{ padding: "20px" }}>
       <Box mb={3}>
@@ -78,14 +120,18 @@ const Step2 = (props: IProps) => {
             }}
           >
             <Box
+              component={image ? "img" : "div"}
+              src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${image}`}
               sx={{
                 width: "250px",
                 height: "250px",
                 backgroundColor: "#ccc",
                 borderRadius: "4px",
+                objectFit: "cover",
               }}
+              alt="Preview"
             />
-            <InputFileUpload />
+            <InputImageFileUpload session={session} setImage={setImage} />
           </Box>
         </Col>
 
@@ -146,7 +192,14 @@ const Step2 = (props: IProps) => {
                 <MenuItem value="CHILL">Chill</MenuItem>
               </Select>
             </FormControl>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                handleSubmit();
+              }}
+              disabled={loading}
+            >
               Save
             </Button>
           </Box>

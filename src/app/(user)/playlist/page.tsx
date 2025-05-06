@@ -223,7 +223,7 @@ const PlaylistPage = () => {
         pt: { xs: 8, md: 12 },
         pb: 8,
         overflow: "hidden",
-        background: "linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%)",
+        background: "#FFF",
       }}
     >
       <StyledContainer maxWidth="lg">
@@ -310,6 +310,7 @@ const PlaylistPage = () => {
                   key={index}
                   label={stat}
                   sx={{
+                    boxShadow: "0 3px 5px 2px rgba(1, 136, 209, 0.2)",
                     minWidth: { xs: "100%", sm: "200px" },
                     color: "#0288D1",
                   }}
