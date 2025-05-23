@@ -48,8 +48,8 @@ export default function UploadTabs() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Tracks" />
-          <Tab label="Basic Info" />
+          <Tab label="Tracks" disabled={value !== 0} />
+          <Tab label="Basic Info" disabled={value !== 1} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

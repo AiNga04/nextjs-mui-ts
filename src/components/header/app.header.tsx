@@ -170,10 +170,10 @@ export default function AppHeader() {
         </MenuItem>
       )}
       <MenuItem onClick={handleMenuClose} sx={{ "> a": linkStyle }}>
-        <Link href="/profile">Profile</Link>
+        <Link href={`/profile/${session?.user._id}`}>Profile</Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose} sx={{ "> a": linkStyle }}>
-        <Link href="/profile">My account</Link>
+        <Link href={`/profile/${session?.user._id}`}>My account</Link>
       </MenuItem>
       <Divider />
       <MenuItem onClick={handleMenuClose} sx={{ "> a": linkStyle }}>

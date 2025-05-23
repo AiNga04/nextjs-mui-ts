@@ -17,6 +17,7 @@ import { InputImageFileUpload } from "@/components/button/upload.btn";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { redirect } from "next/navigation";
 
 interface IFormData {
   title: string;
@@ -100,6 +101,7 @@ const Step2 = (props: IProps) => {
     } finally {
       setLoading(false);
     }
+    redirect("/");
   };
 
   return (
